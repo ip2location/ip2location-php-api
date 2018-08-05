@@ -36,7 +36,7 @@ class IP2LocationAPI
 
 	public function query($ip)
 	{
-		if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+		if (!filter_var($ip, FILTER_VALIDATE_IP)) {
 			return false;
 		}
 
