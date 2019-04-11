@@ -53,7 +53,7 @@ class IP2LocationAPI
 			return false;
 		}
 
-		$response = $this->get('http' . (($this->useSSL) ? 's' : '') . '://api.ip2location.com/?' . http_build_query([
+		$response = $this->get('http' . (($this->useSSL) ? 's' : '') . '://api.ip2location.com/v2/?' . http_build_query([
 			'key'     => $this->apiKey,
 			'ip'      => $ip,
 			'package' => $this->package,
