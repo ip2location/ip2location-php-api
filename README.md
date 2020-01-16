@@ -10,105 +10,113 @@ To begin, an API key is required for this module to function. Find further infor
 
 ## Usage
 
-```
+```php
 <?php
 
-class IP2LocationAPI
-{
-	public $countryCode;
-	public $countryName;
-	public $regionName;
-	public $cityName;
-	public $latitude;
-	public $longitude;
-	public $zipCode;
-	public $isp;
-	public $domain;
-	public $timeZone;
-	public $netSpeed;
-	public $iddCode;
-	public $areaCode;
-	public $weatherStationCode;
-	public $weatherStationName;
-	public $mcc;
-	public $mnc;
-	public $mobileBrand;
-	public $elevation;
-	public $usageType;
+require_once 'class.IP2LocationAPI.php';
 
-	protected $apiKey;
-	protected $package;
-	protected $useSSL;
+$apiKey = 'YOUR_API_KEY';
+$package = 'WS24'; // Package: WS1 - WS24
+$useSSL = false; // Use HTTP or HTTPS (Secure, but slower)
 
-	public function __construct($apiKey = '', $package = 'WS24', $useSSL = false)
-	{
-		$this->apiKey = $apiKey;
-		$this->package = $package;
-		$this->useSSL = $useSSL;
-	}
+$ip = '8.8.8.8';
 
-	public function query($ip)
-	{
-		if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-			return false;
-		}
+// Initialize
+$location = new IP2LocationAPI($apiKey, $package, $useSSL);
 
-		$response = $this->get('http' . (($this->useSSL) ? 's' : '') . '://api.ip2location.com/v2/?' . http_build_query([
-			'key'     => $this->apiKey,
-			'ip'      => $ip,
-			'package' => $this->package,
-			'format'  => 'json',
-		]));
+/*
+Translate country, region, and city name to desired language.
+Refer to product page for available language code.
+*/
+$location->setLanguage('zh-cn');
 
-		if (($json = json_decode($response)) === null) {
-			return false;
-		}
+/*
+Enable add ons to display more result.
+Refer to product page for available add ons.
+*/
+$location->setAddOns([
+	'continent', 'country', 'region', 'city', 'geotargeting', 'country_groupings', 'time_zone_info',
+]);
 
-		if (isset($json->response)) {
-			return false;
-		}
-
-		$this->countryCode = (string) (isset($json->country_code)) ? $json->country_code :'N/A';
-		$this->countryName = (string) (isset($json->country_name)) ? $json->country_name :'N/A';
-		$this->regionName = (string) (isset($json->region_name)) ? $json->region_name :'N/A';
-		$this->cityName = (string) (isset($json->city_name)) ? $json->city_name :'N/A';
-		$this->latitude = (float) (isset($json->latitude)) ? $json->latitude :'N/A';
-		$this->longitude = (float) (isset($json->longitude)) ? $json->longitude :'N/A';
-		$this->zipCode = (string) (isset($json->zip_code)) ? $json->zip_code :'N/A';
-		$this->timeZone = (string) (isset($json->time_zone)) ? $json->time_zone :'N/A';
-		$this->isp = (string) (isset($json->isp)) ? $json->isp :'N/A';
-		$this->domain = (string) (isset($json->domain)) ? $json->domain :'N/A';
-		$this->netSpeed = (string) (isset($json->net_speed)) ? $json->net_speed :'N/A';
-		$this->iddCode = (string) (isset($json->idd_code)) ? $json->idd_code :'N/A';
-		$this->areaCode = (string) (isset($json->area_code)) ? $json->area_code :'N/A';
-		$this->weatherStationCode = (string) (isset($json->weather_station_code)) ? $json->weather_station_code :'N/A';
-		$this->weatherStationName = (string) (isset($json->weather_station_name)) ? $json->weather_station_name :'N/A';
-		$this->mcc = (string) (isset($json->mcc)) ? $json->mcc :'N/A';
-		$this->mnc = (string) (isset($json->mnc)) ? $json->mnc :'N/A';
-		$this->mobileBrand = (string) (isset($json->mobile_brand)) ? $json->mobile_brand :'N/A';
-		$this->elevation = (int) (isset($json->elevation)) ? $json->elevation :'N/A';
-		$this->usageType = (string) (isset($json->usage_type)) ? $json->usage_type :'N/A';
-
-		return true;
-	}
-
-	private function get($url)
-	{
-		$ch = curl_init();
-
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'IP2LocationAPI_PHP-1.0.0');
-		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-		$response = curl_exec($ch);
-
-		return $response;
-	}
+// Start query
+if (!$location->query($ip)) {
+	die('ERROR');
 }
 
-?>
+echo '<pre>';
+echo 'Country Code         : ' . $location->countryCode . "\n";
+echo 'Country Name         : ' . $location->countryName . "\n";
+echo 'Region Name          : ' . $location->regionName . "\n";
+echo 'City Name            : ' . $location->cityName . "\n";
+echo 'Latitude             : ' . $location->latitude . "\n";
+echo 'Longitude            : ' . $location->longitude . "\n";
+echo 'ZIP Code             : ' . $location->zipCode . "\n";
+echo 'Time Zone            : ' . $location->timeZone . "\n";
+echo 'ISP                  : ' . $location->isp . "\n";
+echo 'Domain               : ' . $location->domain . "\n";
+echo 'Latitude             : ' . $location->netSpeed . "\n";
+echo 'IDD Code             : ' . $location->iddCode . "\n";
+echo 'Area Code            : ' . $location->areaCode . "\n";
+echo 'Weather Station Code : ' . $location->weatherStationCode . "\n";
+echo 'Weather Station Name : ' . $location->weatherStationName . "\n";
+echo 'Mobile Brand         : ' . $location->mobileBrand . "\n";
+echo 'Elevation            : ' . $location->elevation . "\n";
+echo 'Usage Type           : ' . $location->usageType . "\n\n";
+
+if ($location->continent) {
+	echo 'Continent Name       : ' . $location->continent['name'] . "\n";
+	echo 'Continent Code       : ' . $location->continent['code'] . "\n";
+	echo 'Hemisphere           : ' . $location->continent['hemisphere'] . "\n";
+	echo 'Localize Name        : ' . $location->continent['translated'] . "\n\n";
+}
+
+if ($location->country) {
+	echo 'Country Name         : ' . $location->country['name'] . "\n";
+	echo 'Localize Name        : ' . $location->country['translated'] . "\n";
+	echo 'Alpha 3 Code         : ' . $location->country['alpha3Code'] . "\n";
+	echo 'Numeric Code         : ' . $location->country['numericCode'] . "\n";
+	echo 'Demonym              : ' . $location->country['demonym'] . "\n";
+	echo 'Flag                 : ' . $location->country['flag'] . "\n";
+	echo 'Capital              : ' . $location->country['capital'] . "\n";
+	echo 'Total Area           : ' . $location->country['totalArea'] . "\n";
+	echo 'Population           : ' . $location->country['population'] . "\n";
+	echo 'Currency             : ' . $location->country['currencyName'] . ' (' . $location->country['currencyCode'] . ', ' . $location->country['currencySymbol'] . ')' . "\n";
+	echo 'Language             : ' . $location->country['languageName'] . ' (' . $location->country['languageCode'] . ')' . "\n";
+	echo 'IDD Code             : ' . $location->country['iddCode'] . "\n";
+	echo 'TLD                  : ' . $location->country['tld'] . "\n\n";
+}
+
+if ($location->region) {
+	echo 'Region Name          : ' . $location->region['name'] . "\n";
+	echo 'Localize Name        : ' . $location->region['translated'] . "\n";
+	echo 'Region Code          : ' . $location->region['code'] . "\n\n";
+}
+
+if ($location->city) {
+	echo 'City Name            : ' . $location->city['name'] . "\n";
+	echo 'Localize Name        : ' . $location->city['translated'] . "\n\n";
+}
+
+if ($location->geotargeting) {
+	echo 'Metro Code           : ' . $location->geotargeting['metro'] . "\n\n";
+}
+
+if ($location->countryGroupings) {
+	foreach ($location->countryGroupings as $group) {
+		echo 'Group of             : ' . $group->name . ' (' . $group->acronym . ')' . "\n";
+	}
+
+	echo "\n";
+}
+
+if ($location->timeZoneInfo) {
+	echo 'Olson                : ' . $location->timeZoneInfo['olson'] . "\n";
+	echo 'Current Time         : ' . $location->timeZoneInfo['currentTime'] . "\n";
+	echo 'GMT Offset           : ' . $location->timeZoneInfo['gmtOffset'] . "\n";
+	echo 'DST                  : ' . $location->timeZoneInfo['isDST'] . "\n";
+}
+
+echo '</pre>';
 ```
 
 
