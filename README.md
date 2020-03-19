@@ -1,5 +1,7 @@
 # IP2Location PHP API
 
+> This project has been merged into [IP2Location-PHP-Module](https://github.com/chrislim2888/IP2Location-PHP-Module). We will  no longer maintain and support this project. Please visit  [IP2Location-PHP-Module](https://github.com/chrislim2888/IP2Location-PHP-Module) for latest updates or enhancements.
+
 This module allows user to geolocate the country, region, city, coordinates, zip code, ISP, domain name, timezone, connection speed, IDD code, area code, weather station code, weather station name, MCC, MNC, mobile brand name, elevation and usage type that any IP address or host name originates from by calling the **IP2Location API**.
 
 
