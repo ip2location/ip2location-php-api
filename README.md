@@ -18,7 +18,7 @@ To begin, an API key is required for this module to function. Find further infor
 require_once 'class.IP2LocationAPI.php';
 
 $apiKey = 'YOUR_API_KEY';
-$package = 'WS24'; // Package: WS1 - WS24
+$package = 'WS25'; // Package: WS1 - WS25
 $useSSL = false; // Use HTTP or HTTPS (Secure, but slower)
 
 $ip = '8.8.8.8';
@@ -64,6 +64,8 @@ echo 'Weather Station Name : ' . $location->weatherStationName . "\n";
 echo 'Mobile Brand         : ' . $location->mobileBrand . "\n";
 echo 'Elevation            : ' . $location->elevation . "\n";
 echo 'Usage Type           : ' . $location->usageType . "\n\n";
+echo 'Address Type         : ' . $location->addressType . "\n\n";
+echo 'Category             : ' . $location->category . "\n\n";
 
 if ($location->continent) {
 	echo 'Continent Name       : ' . $location->continent['name'] . "\n";
@@ -120,5 +122,4 @@ if ($location->timeZoneInfo) {
 
 echo '</pre>';
 ```
-
 

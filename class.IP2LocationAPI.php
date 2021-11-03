@@ -22,6 +22,8 @@ class IP2LocationAPI
 	public $mobileBrand;
 	public $elevation;
 	public $usageType;
+	public $addressType;
+	public $category;
 
 	public $continent = [
 		'name'       => '',
@@ -132,7 +134,7 @@ class IP2LocationAPI
 			return false;
 		}
 
-		if (isset($json->response)) {
+		if ($json->response != 'OK') {
 			return false;
 		}
 
@@ -156,6 +158,8 @@ class IP2LocationAPI
 		$this->mobileBrand = (string) (isset($json->mobile_brand)) ? $json->mobile_brand : 'N/A';
 		$this->elevation = (int) (isset($json->elevation)) ? $json->elevation : 'N/A';
 		$this->usageType = (string) (isset($json->usage_type)) ? $json->usage_type : 'N/A';
+		$this->addressType = (string) (isset($json->address_type)) ? $json->address_type : 'N/A';
+		$this->category = (string) (isset($json->category)) ? $json->category : 'N/A';
 
 		if (isset($json->continent)) {
 			$this->continent = [
@@ -232,7 +236,7 @@ class IP2LocationAPI
 		curl_setopt($ch, CURLOPT_FAILONERROR, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'IP2LocationAPI_PHP-1.1.0');
+		curl_setopt($ch, CURLOPT_USERAGENT, 'IP2LocationAPI_PHP-1.2.0');
 		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 		$response = curl_exec($ch);
 

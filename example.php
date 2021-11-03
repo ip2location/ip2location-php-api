@@ -3,7 +3,7 @@
 require_once 'class.IP2LocationAPI.php';
 
 $apiKey = 'YOUR_API_KEY';
-$package = 'WS24'; // Package: WS1 - WS24
+$package = 'WS25'; // Package: WS1 - WS25
 $useSSL = false; // Use HTTP or HTTPS (Secure, but slower)
 
 $ip = '8.8.8.8';
